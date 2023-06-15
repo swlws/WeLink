@@ -1,0 +1,65 @@
+.container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  > header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    background-color: #000;
+
+    color: #fff;
+
+    > header {
+      width: 200px;
+      font-size: 1.5em;
+      font-weight: bold;
+      background-color: #000;
+      text-align: center;
+    }
+
+    > main {
+      padding-right: 20px;
+    }
+  }
+
+  > section {
+    height: 100%;
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+
+    > aside {
+      width: 200px;
+      text-align: right;
+      border-right: 1px solid #e8e8e8;
+
+      > a {
+        display: block;
+
+        width: 100%;
+        padding: 10px 0;
+        text-align: center;
+        transition: all 0.3s;
+
+        &:hover {
+          color: #009afe;
+        }
+      }
+    }
+
+    > main {
+      flex: 1;
+      padding: 0 20px;
+      overflow: auto;
+    }
+  }
+}
+
+.checked_link {
+  color: #009afe;
+}

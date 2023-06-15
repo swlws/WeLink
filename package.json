@@ -1,0 +1,12 @@
+{
+  "name": "WeLink",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "ui:dev": "pnpm --filter @welink/ui-pc dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
