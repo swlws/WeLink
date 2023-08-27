@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "ui:dev": "pnpm --filter @welink/ui-pc dev"
+    "build": "./scripts/build/build_pc.sh",
+    "dev:ui": "pnpm --filter @welink/ui-pc dev",
+    "build:ui": "pnpm --filter @welink/ui-pc build"
   },
   "keywords": [],
   "author": "",

@@ -16,7 +16,9 @@ type IProps = {
 export default function MainFrame(props: IProps) {
   const location = useLocation();
   if (location.pathname === "/") {
-    history.pushState({}, "", "/home");
+    setTimeout(() => {
+      window.location.href = "#/dashboard";
+    });
   }
 
   const [checkId, setCheckedId] = useState(

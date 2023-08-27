@@ -1,0 +1,14 @@
+.container {
+  > header {
+    margin: 50px 0;
+    color: #333;
+    font-size: 3em;
+    font-weight: bolder;
+    text-align: center;
+  }
+
+  > main {
+    text-align: center;
+    color: #666;
+  }
+}

@@ -1,17 +1,18 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createHashRouter } from "react-router-dom";
 import MainFrame from "@/components/MainFrame/index.tsx";
 import menu from "@/data/menu.ts";
-import Home from "@/pages/home/index";
+import Dashboard from "@/pages/dashboard/index";
 import Link from "@/pages/link/index";
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: "/",
     element: <MainFrame menus={menu} />,
     children: [
       {
-        path: "home",
-        element: <Home />,
+        path: "dashboard",
+        element: <Dashboard />,
+        index: true,
       },
       {
         path: "link",
