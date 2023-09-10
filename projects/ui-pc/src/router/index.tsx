@@ -3,6 +3,7 @@ import MainFrame from "@/components/MainFrame/index.tsx";
 import menu from "@/data/menu.ts";
 import Dashboard from "@/pages/dashboard/index";
 import Link from "@/pages/link/index";
+import Setting from "@/pages/setting/index";
 
 const router = createHashRouter([
   {
@@ -17,6 +18,10 @@ const router = createHashRouter([
       {
         path: "link",
         element: <Link />,
+      },
+      {
+        path: "setting",
+        element: <Setting />,
       },
     ],
   },

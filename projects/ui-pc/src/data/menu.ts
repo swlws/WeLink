@@ -9,4 +9,9 @@ export default [
     name: "链接",
     url: "/link",
   },
+  {
+    id: "003",
+    name: "配置",
+    url: "/setting",
+  },
 ];

@@ -6,9 +6,10 @@
     height: auto;
     padding: 10px;
     border-bottom: 1px solid #e8e8e8;
-    > input {
-      margin: 0 10px;
-      width: 300px;
+    display: flex;
+
+    > span {
+      margin-right: 10px;
     }
   }
 
@@ -31,7 +32,7 @@
       > span.tag {
         margin-left: 5px;
         color: #fff;
-        background-color: #009afe;
+        background-color: #52c41a;
         min-width: 20px;
         height: 20px;
         text-align: center;

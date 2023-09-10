@@ -1,0 +1,21 @@
+.container {
+  padding: 20px 0;
+}
+
+.site_config {
+  max-height: 400px;
+
+  display: flex;
+  flex-direction: column;
+
+  > main {
+    flex: 1;
+    max-height: 400px;
+    overflow: auto;
+  }
+  > footer {
+    padding: 10px 0 0 0;
+    border-top: 1px solid #e8e8e8;
+    text-align: center;
+  }
+}

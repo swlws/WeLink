@@ -1,109 +1,72 @@
-import { useState } from "react";
-import styles from "./index.module.scss";
+import { useEffect, useState } from "react";
+
 import useStorage from "@/use/useStorage";
-import { handleDomEventProxy } from "@/util/dom";
+import { Button, Tabs, TabsProps, message } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
+import SiteList from "./SiteList";
+import AddCategory from "./AddCategory";
 
-type Record = {
-  title: string;
-  url: string;
-  count: number;
-};
-
-export default function Link() {
-  const CACHE_KEY = "site_list";
+export default function LinkTabs() {
+  const CACHE_KEY = "site_category";
   const [getItem, setItem] = useStorage();
+  const [messageApi] = message.useMessage();
 
-  const [list, setList] = useState<Record[]>(() => {
+  const [list, setList] = useState<string[]>(() => {
     return getItem(CACHE_KEY) || [];
   });
-  const [title, setTitle] = useState("");
-  const [url, setUrl] = useState("");
 
-  const syncList = (list: Record[]) => {
+  const syncList = (list: string[]) => {
     setList(list);
     setItem(CACHE_KEY, list);
   };
 
-  const clear = () => {
-    setTitle("");
-    setUrl("");
-  };
-
-  const inputValueChange = (type: "title" | "url", value: string) => {
-    if (type === "title") {
-      setTitle(value);
-    } else if (type === "url") {
-      setUrl(value);
+  const [visibility, setVisibility] = useState(false);
+  const addSuccess = (title: string) => {
+    if (list.includes(title)) {
+      return messageApi.open({
+        type: "warning",
+        content: `类型【${title}】已经存在`,
+      });
     }
+
+    syncList([...list, title]);
   };
 
-  const addRow = () => {
-    if (!title || !url) return;
-
-    list.push({ title, url, count: 0 });
-    syncList([...list]);
-
-    clear();
+  const closeModel = () => {
+    setVisibility(false);
   };
 
-  const rmRow = (e: React.MouseEvent, index: number) => {
-    e.stopPropagation();
-    list.splice(index, 1);
-    syncList([...list]);
+  useEffect(() => {
+    if (list.length === 0) {
+      setList(["All"]);
+    }
+  }, [list]);
+
+  const operations = {
+    left: (
+      <Button
+        type="link"
+        onClick={() => setVisibility(true)}
+        icon={<PlusOutlined />}
+      />
+    ),
   };
 
-  const toSite = (e: React.MouseEvent) => {
-    handleDomEventProxy(e, (target) => {
-      if (!target) return;
-
-      const { index } = target.dataset;
-      const info = index ? list[parseInt(index)] : null;
-      if (!info) return;
-
-      if (!/^http/gi.test(info.url)) return;
-      info.count = (info.count || 0) + 1;
-      syncList([...list]);
-
-      window.open(info.url);
-    });
-  };
+  const items: TabsProps["items"] = list.map((item) => ({
+    key: item,
+    label: item,
+    children: <SiteList category={item} />,
+  }));
 
   return (
-    <article className={styles.container}>
-      <header>
-        <input
-          type="text"
-          placeholder="Title"
-          value={title}
-          checked
-          onChange={(e) => inputValueChange("title", e.target.value)}
-        />
-        <input
-          type="text"
-          value={url}
-          placeholder="URL"
-          onChange={(e) => inputValueChange("url", e.target.value)}
-        />
+    <article>
+      <Tabs
+        tabBarExtraContent={operations}
+        defaultActiveKey="Default"
+        items={items}
+      ></Tabs>
 
-        <button onClick={addRow}>Add</button>
-      </header>
-
-      <main onClick={toSite}>
-        {list.map((item, index) => {
-          return (
-            <div key={index} data-index={index} data-proxy>
-              <span>{index + 1}.</span>
-              <span className={styles.tag}>{item.count}</span>
-              <span>【{item.title}】</span>
-              <span>{item.url}</span>
-              <span
-                className={styles.del}
-                onClick={(e) => rmRow(e, index)}
-              ></span>
-            </div>
-          );
-        })}
-      </main>
+      <AddCategory visibility={visibility} ok={addSuccess} close={closeModel} />
     </article>
   );
 }
