@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-
+import dayjs from "dayjs";
 import styles from "./index.module.scss";
-import useStorage from "@/use/useStorage";
 import { handleDomEventProxy } from "@/util/dom";
 import { Input, Button } from "antd";
 import { SiteRecord } from "@/typing";
+import Card from "./Card";
+import useApi from "./useApi";
 
 type SiteListProps = {
   category: string;
@@ -17,28 +18,18 @@ type SiteListProps = {
  * @returns
  */
 export default function SiteList(props: SiteListProps) {
-  const CACHE_KEY = "site_list";
-  const [getItem, setItem] = useStorage();
-  const [list, setList] = useState<SiteRecord[]>(() => {
-    return getItem(CACHE_KEY) || [];
-  });
-  const [renderedList, setRenderedList] = useState<SiteRecord[]>([]);
+  const { getLinkList, addOneLink, delOneLink, updateOneLink } = useApi();
 
+  const [renderedList, setRenderedList] = useState<SiteRecord[]>([]);
   useEffect(() => {
-    setRenderedList(
-      list.filter((item) => {
-        return ["All", item.category].includes(props.category);
-      })
-    );
-  }, [list, props.category]);
+    console.log("useEffect");
+    getLinkList(props.category).then((list) => {
+      setRenderedList(list);
+    });
+  }, []);
 
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
-
-  const syncList = (list: SiteRecord[]) => {
-    setList(list);
-    setItem(CACHE_KEY, list);
-  };
 
   const clear = () => {
     setTitle("");
@@ -55,17 +46,21 @@ export default function SiteList(props: SiteListProps) {
 
   const addRow = () => {
     if (!title || !url) return;
-
-    list.push({ title, url, count: 0, category: props.category });
-    syncList([...list]);
-
-    clear();
+    addOneLink({
+      title,
+      url,
+      count: 0,
+      category: props.category,
+      create_time: dayjs().toISOString(),
+    }).then((list) => {
+      setRenderedList(list);
+      clear();
+    });
   };
 
-  const rmRow = (e: React.MouseEvent, index: number) => {
-    e.stopPropagation();
-    list.splice(index, 1);
-    syncList([...list]);
+  const rmRow = (row: SiteRecord) => {
+    console.log("rmRow");
+    delOneLink(row).then(setRenderedList);
   };
 
   const toSite = (e: React.MouseEvent) => {
@@ -73,19 +68,21 @@ export default function SiteList(props: SiteListProps) {
       if (!target) return;
 
       const { index } = target.dataset;
-      const info = index ? list[parseInt(index)] : null;
+      const info = index ? renderedList[parseInt(index)] : null;
       if (!info) return;
 
       if (!/^http/gi.test(info.url)) return;
       info.count = (info.count || 0) + 1;
-      syncList([...list]);
+      info.last_access_time = dayjs().toISOString();
 
       window.open(info.url);
+
+      updateOneLink(info).then(setRenderedList);
     });
   };
 
   return (
-    <article className={styles.container}>
+    <article className={styles["site-list"]}>
       <header>
         <Input
           prefix="Title"
@@ -105,20 +102,9 @@ export default function SiteList(props: SiteListProps) {
       </header>
 
       <main onClick={toSite}>
-        {renderedList.map((item, index) => {
-          return (
-            <div key={index} data-index={index} data-proxy>
-              <span>{index + 1}.</span>
-              <span className={styles.tag}>{item.count}</span>
-              <span>【{item.title}】</span>
-              <span>{item.url}</span>
-              <span
-                className={styles.del}
-                onClick={(e) => rmRow(e, index)}
-              ></span>
-            </div>
-          );
-        })}
+        {renderedList.map((item, index) => (
+          <Card record={item} rm={rmRow} key={index} data-index={index}></Card>
+        ))}
       </main>
     </article>
   );

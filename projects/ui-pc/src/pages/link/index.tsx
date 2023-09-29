@@ -1,46 +1,27 @@
 import { useEffect, useState } from "react";
 
-import useStorage from "@/use/useStorage";
-import { Button, Tabs, TabsProps, message } from "antd";
+import { Button, Tabs, TabsProps } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import SiteList from "./SiteList";
 import AddCategory from "./AddCategory";
+import useApi from "./useApi";
 
 export default function LinkTabs() {
-  const CACHE_KEY = "site_category";
-  const [getItem, setItem] = useStorage();
-  const [messageApi] = message.useMessage();
+  const { getCategoryList, addOneCateGory } = useApi();
 
-  const [list, setList] = useState<string[]>(() => {
-    return getItem(CACHE_KEY) || [];
-  });
-
-  const syncList = (list: string[]) => {
-    setList(list);
-    setItem(CACHE_KEY, list);
-  };
+  const [list, setList] = useState<string[]>([]);
+  useEffect(() => {
+    getCategoryList().then((list) => setList(list));
+  }, []);
 
   const [visibility, setVisibility] = useState(false);
   const addSuccess = (title: string) => {
-    if (list.includes(title)) {
-      return messageApi.open({
-        type: "warning",
-        content: `类型【${title}】已经存在`,
-      });
-    }
-
-    syncList([...list, title]);
+    addOneCateGory(title).then((list) => {
+      setList(list);
+    });
   };
 
-  const closeModel = () => {
-    setVisibility(false);
-  };
-
-  useEffect(() => {
-    if (list.length === 0) {
-      setList(["All"]);
-    }
-  }, [list]);
+  const closeModel = () => setVisibility(false);
 
   const operations = {
     left: (
@@ -59,13 +40,13 @@ export default function LinkTabs() {
   }));
 
   return (
-    <article>
+    <article style={{ height: "100%" }}>
       <Tabs
+        style={{ height: "100%" }}
         tabBarExtraContent={operations}
         defaultActiveKey="Default"
         items={items}
       ></Tabs>
-
       <AddCategory visibility={visibility} ok={addSuccess} close={closeModel} />
     </article>
   );

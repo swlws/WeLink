@@ -1,7 +1,7 @@
 export default [
   {
     id: "001",
-    name: "仪表盘",
+    name: "首页",
     url: "/dashboard",
   },
   {

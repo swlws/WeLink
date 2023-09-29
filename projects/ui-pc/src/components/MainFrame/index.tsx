@@ -29,11 +29,7 @@ export default function MainFrame(props: IProps) {
     <article className={styles.container}>
       <header>
         <header>WeLink</header>
-        <main>Login</main>
-      </header>
-
-      <section>
-        <aside>
+        <main>
           {props.menus.map((item) => (
             <Link
               className={checkId === item.id ? styles.checked_link : ""}
@@ -44,12 +40,13 @@ export default function MainFrame(props: IProps) {
               {item.name}
             </Link>
           ))}
-        </aside>
-
-        <main>
-          <Outlet />
         </main>
-      </section>
+        {/* <footer>Login</footer> */}
+      </header>
+
+      <main>
+        <Outlet />
+      </main>
     </article>
   );
 }
