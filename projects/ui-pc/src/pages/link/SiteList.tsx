@@ -5,7 +5,8 @@ import { handleDomEventProxy } from "@/util/dom";
 import { Input, Button } from "antd";
 import { SiteRecord } from "@/typing";
 import Card from "./Card";
-import useApi from "./useApi";
+import { v4 } from "uuid";
+import { getLinkList, upsertOneLink, delOneLink } from "@/api/site_link";
 
 type SiteListProps = {
   category: string;
@@ -18,15 +19,16 @@ type SiteListProps = {
  * @returns
  */
 export default function SiteList(props: SiteListProps) {
-  const { getLinkList, addOneLink, delOneLink, updateOneLink } = useApi();
-
   const [renderedList, setRenderedList] = useState<SiteRecord[]>([]);
-  useEffect(() => {
-    console.log("useEffect");
+
+  const resetRenderedList = () => {
+    console.log("call resetRenderedList");
     getLinkList(props.category).then((list) => {
       setRenderedList(list);
     });
-  }, []);
+  };
+
+  useEffect(resetRenderedList, []);
 
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
@@ -46,21 +48,23 @@ export default function SiteList(props: SiteListProps) {
 
   const addRow = () => {
     if (!title || !url) return;
-    addOneLink({
+
+    const info = {
       title,
       url,
       count: 0,
       category: props.category,
       create_time: dayjs().toISOString(),
-    }).then((list) => {
-      setRenderedList(list);
+      uuid: v4(),
+    };
+    upsertOneLink(info).then(() => {
+      resetRenderedList();
       clear();
     });
   };
 
   const rmRow = (row: SiteRecord) => {
-    console.log("rmRow");
-    delOneLink(row).then(setRenderedList);
+    delOneLink(row).then(resetRenderedList);
   };
 
   const toSite = (e: React.MouseEvent) => {
@@ -77,7 +81,7 @@ export default function SiteList(props: SiteListProps) {
 
       window.open(info.url);
 
-      updateOneLink(info).then(setRenderedList);
+      upsertOneLink(info).then(resetRenderedList);
     });
   };
 

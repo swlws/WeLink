@@ -3,14 +3,13 @@
 }
 
 .site_config {
-  max-height: 400px;
+  max-height: 700px;
 
   display: flex;
   flex-direction: column;
 
   > main {
     flex: 1;
-    max-height: 400px;
     overflow: auto;
   }
   > footer {

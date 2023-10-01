@@ -5,4 +5,5 @@ export type SiteRecord = {
   category: string;
   create_time: string;
   last_access_time?: string;
+  uuid: string;
 };

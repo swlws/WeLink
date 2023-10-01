@@ -67,6 +67,7 @@ importers:
       '@ant-design/icons': ^5.2.6
       '@types/react': ^18.0.37
       '@types/react-dom': ^18.0.11
+      '@types/uuid': ^9.0.4
       '@typescript-eslint/eslint-plugin': ^5.59.0
       '@typescript-eslint/parser': ^5.59.0
       '@vitejs/plugin-react-swc': ^3.0.0
@@ -75,20 +76,25 @@ importers:
       eslint: ^8.38.0
       eslint-plugin-react-hooks: ^4.6.0
       eslint-plugin-react-refresh: ^0.3.4
+      localforage: ^1.10.0
       react: ^18.2.0
       react-dom: ^18.2.0
       react-router-dom: ^6.12.1
       sass: ^1.63.4
       typescript: ^5.0.2
+      uuid: ^9.0.1
       vite: ^4.3.9
     dependencies:
       '@ant-design/icons': 5.2.6_biqbaboplfbrettd7655fr4n2y
+      '@types/uuid': 9.0.4
       antd: 5.9.0_biqbaboplfbrettd7655fr4n2y
       dayjs: 1.11.10
+      localforage: 1.10.0
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       react-router-dom: 6.12.1_biqbaboplfbrettd7655fr4n2y
       sass: 1.63.4
+      uuid: 9.0.1
     devDependencies:
       '@types/react': 18.2.12
       '@types/react-dom': 18.2.5
@@ -715,6 +721,10 @@ packages:
 
   /@types/tough-cookie/4.0.2:
     resolution: {integrity: sha512-Q5vtl1W5ue16D+nIaW8JWebSSraJVlK+EthKn7e7UcD4KWsaSJ8BqGPXNaPghgtcn/fhvrN17Tv8ksUsQpiplw==}
+    dev: false
+
+  /@types/uuid/9.0.4:
+    resolution: {integrity: sha512-zAuJWQflfx6dYJM62vna+Sn5aeSWhh3OB+wfUEACNcqUSc0AGc5JKl+ycL1vrH7frGTXhJchYjE1Hak8L819dA==}
     dev: false
 
   /@typescript-eslint/eslint-plugin/5.59.11_sqfi766b7p7jf53aqxvjxvblnq:
@@ -1405,6 +1415,10 @@ packages:
     engines: {node: '>= 4'}
     dev: true
 
+  /immediate/3.0.6:
+    resolution: {integrity: sha512-XXOFtyqDjNDAQxVfYxuF7g9Il/IbWmmlQg2MYKOH8ExIT1qg6xc4zyS3HaEEATgs1btfzxq15ciUiY7gjSXRGQ==}
+    dev: false
+
   /immutable/4.3.0:
     resolution: {integrity: sha512-0AOCmOip+xgJwEVTQj1EfiDDOkPmuyllDuTuEX+DDXUgapLAsBIfkg3sxCYyCEA8mQqZrrxPUGjcOQ2JS3WLkg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/immutable/-/immutable-4.3.0.tgz}
 
@@ -1493,6 +1507,18 @@ packages:
       prelude-ls: 1.2.1
       type-check: 0.4.0
     dev: true
+
+  /lie/3.1.1:
+    resolution: {integrity: sha512-RiNhHysUjhrDQntfYSfY4MU24coXXdEOgw9WGcKHNeEwffDYbF//u87M1EWaMGzuFoSbqW0C9C6lEEhDOAswfw==}
+    dependencies:
+      immediate: 3.0.6
+    dev: false
+
+  /localforage/1.10.0:
+    resolution: {integrity: sha512-14/H1aX7hzBBmmh7sGPd+AOMkkIrHM3Z1PAyGgZigA1H1p5O5ANnMyWzvpAETtG68/dC4pC0ncy3+PPGzXZHPg==}
+    dependencies:
+      lie: 3.1.1
+    dev: false
 
   /locate-path/6.0.0:
     resolution: {integrity: sha512-iPZK6eYjbxRu3uB4/WZ3EsEIMJFMqAoopl3R+zuq0UjcAm/MO6KCweDgPfP3elTztoKP3KtnVHxTn2NHBSDVUw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/locate-path/-/locate-path-6.0.0.tgz}
@@ -2411,6 +2437,11 @@ packages:
     dependencies:
       punycode: 2.3.0
     dev: true
+
+  /uuid/9.0.1:
+    resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
+    hasBin: true
+    dev: false
 
   /vite/4.3.9_sass@1.63.4:
     resolution: {integrity: sha512-qsTNZjO9NoJNW7KnOrgYwczm0WctJ8m/yqYAMAK9Lxt4SoySUfS5S8ia9K7JHpa3KEeMfyF8LoJ3c5NeBJy6pg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/vite/-/vite-4.3.9.tgz}

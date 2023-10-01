@@ -4,11 +4,10 @@ import { Button, Tabs, TabsProps } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import SiteList from "./SiteList";
 import AddCategory from "./AddCategory";
-import useApi from "./useApi";
+
+import { getCategoryList, addOneCateGory } from "@/api/site_link";
 
 export default function LinkTabs() {
-  const { getCategoryList, addOneCateGory } = useApi();
-
   const [list, setList] = useState<string[]>([]);
   useEffect(() => {
     getCategoryList().then((list) => setList(list));

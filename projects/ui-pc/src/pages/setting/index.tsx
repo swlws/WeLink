@@ -1,5 +1,4 @@
 import { SiteRecord } from "@/typing";
-import useStorage from "@/use/useStorage";
 import {
   Button,
   Collapse,
@@ -8,29 +7,35 @@ import {
   Input,
   message,
 } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./index.module.scss";
-import { stringToFile } from "@/util/tool";
+import { stringToFile, toClipboard } from "@/util/tool";
+import { batchAddLinks, clearLinks, getLinkList } from "@/api/site_link";
 
 const { TextArea } = Input;
 
 function SiteConfig(props: { keyName: string }) {
   const CACHE_KEY = props.keyName;
-  const [getItem, setItem] = useStorage();
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [config, setConfig] = useState("");
-  const [list] = useState<SiteRecord[]>(() => {
-    return getItem(CACHE_KEY) || [];
-  });
+  const [list, setList] = useState<SiteRecord[]>([]);
+
+  useEffect(() => {
+    getLinkList().then(setList);
+  }, []);
+
   const exportFile = () => {
     stringToFile(JSON.stringify(list), CACHE_KEY + ".txt");
   };
 
-  const importConfig = () => {
+  const importConfig = async () => {
     try {
       const data = JSON.parse(config);
-      setItem(CACHE_KEY, data);
+      await clearLinks();
+      await batchAddLinks(data);
+      setList(await getLinkList());
+
       setIsModalOpen(false);
     } catch (e) {
       message.warning("Must Be JSON");
@@ -43,6 +48,12 @@ function SiteConfig(props: { keyName: string }) {
         <pre>{JSON.stringify(list, null, 2)}</pre>
       </main>
       <footer>
+        <Button
+          type="primary"
+          onClick={() => toClipboard(JSON.stringify(list))}
+        >
+          拷贝配置
+        </Button>
         <Button type="primary" onClick={() => setIsModalOpen(true)}>
           导入
         </Button>

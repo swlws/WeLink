@@ -16,3 +16,7 @@ export function stringToFile(content: string, fileName = "text.txt") {
   aEl.click();
   URL.revokeObjectURL(link);
 }
+
+export function toClipboard(content: string) {
+  if (navigator.clipboard) navigator.clipboard.writeText(content);
+}
