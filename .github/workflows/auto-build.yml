@@ -2,7 +2,7 @@ name: auto-build-actions
 run-name: ${{ github.actor }} trigger automatic deployment
 on: [push]
 jobs:
-  check-bats-version:
+  build-ui:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
