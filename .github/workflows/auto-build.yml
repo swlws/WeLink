@@ -1,9 +1,13 @@
 name: auto-build-actions
 run-name: ${{ github.actor }} trigger automatic deployment
-on: [push]
+on:
+  push:
+    branches:
+      - master
 jobs:
   build-ui:
-    runs-on: ubuntu-latest
+    name: build ui project
+    runs-on: macOS-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
