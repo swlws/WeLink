@@ -6,7 +6,7 @@ export default function Home() {
       <header>Welcome To WeLink</header>
       <main>A Tool For Recording Web Site.</main>
       <br />
-      <main>All Data Is Only Stored Locally.</main>
+      <main>All Data Is Only Stored Locally...</main>
     </article>
   );
 }
