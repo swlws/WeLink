@@ -16,9 +16,5 @@ jobs:
       - name: Install PNPM
         uses: pnpm/action-setup@v2
       - name: Build and Deploy
-        uses: JamesIves/github-pages-deploy-action@master
-        env:
-          ACCESS_TOKEN: ${{ secrets.DEPLOY_TOKEN }}
-          BRANCH: gh-pages
-          FOLDER: build
-          BUILD_SCRIPT: pnpm install && pnpm build
+        run: pnpm install && pnpm build
+        
