@@ -10,6 +10,7 @@ import { getLinkList, upsertOneLink, delOneLink } from "@/api/site_link";
 
 type SiteListProps = {
   category: string;
+  sign: boolean;
 };
 
 /**
@@ -22,13 +23,12 @@ export default function SiteList(props: SiteListProps) {
   const [renderedList, setRenderedList] = useState<SiteRecord[]>([]);
 
   const resetRenderedList = () => {
-    console.log("call resetRenderedList");
     getLinkList(props.category).then((list) => {
       setRenderedList(list);
     });
   };
 
-  useEffect(resetRenderedList, []);
+  useEffect(resetRenderedList, [props.sign]);
 
   const [title, setTitle] = useState("");
   const [url, setUrl] = useState("");
