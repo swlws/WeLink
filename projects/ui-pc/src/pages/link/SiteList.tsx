@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
-import dayjs from "dayjs";
-import styles from "./index.module.scss";
-import { handleDomEventProxy } from "@/util/dom";
-import { Input, Button } from "antd";
-import { SiteRecord } from "@/typing";
-import Card from "./Card";
-import { v4 } from "uuid";
-import { getLinkList, upsertOneLink, delOneLink } from "@/api/site_link";
+import { delOneLink, getLinkList, upsertOneLink } from '@/api/site_link';
+import { SiteRecord } from '@/typing';
+import { handleDomEventProxy } from '@/util/dom';
+import { Button, Input } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { v4 } from 'uuid';
+import Card from './Card';
+import styles from './index.module.scss';
 
 type SiteListProps = {
   category: string;
@@ -28,20 +27,20 @@ export default function SiteList(props: SiteListProps) {
     });
   };
 
-  useEffect(resetRenderedList, [props.sign]);
+  useEffect(resetRenderedList, [props.category, props.sign]);
 
-  const [title, setTitle] = useState("");
-  const [url, setUrl] = useState("");
+  const [title, setTitle] = useState('');
+  const [url, setUrl] = useState('');
 
   const clear = () => {
-    setTitle("");
-    setUrl("");
+    setTitle('');
+    setUrl('');
   };
 
-  const inputValueChange = (type: "title" | "url", value: string) => {
-    if (type === "title") {
+  const inputValueChange = (type: 'title' | 'url', value: string) => {
+    if (type === 'title') {
       setTitle(value);
-    } else if (type === "url") {
+    } else if (type === 'url') {
       setUrl(value);
     }
   };
@@ -54,7 +53,7 @@ export default function SiteList(props: SiteListProps) {
       url,
       count: 0,
       category: props.category,
-      create_time: dayjs().toISOString(),
+      create_time: +new Date(),
       uuid: v4(),
     };
     upsertOneLink(info).then(() => {
@@ -77,7 +76,7 @@ export default function SiteList(props: SiteListProps) {
 
       if (!/^http/gi.test(info.url)) return;
       info.count = (info.count || 0) + 1;
-      info.last_access_time = dayjs().toISOString();
+      info.last_access_time = +new Date();
 
       window.open(info.url);
 
@@ -86,21 +85,16 @@ export default function SiteList(props: SiteListProps) {
   };
 
   return (
-    <article className={styles["site-list"]}>
+    <article className={styles['site-list']}>
       <header>
         <Input
           prefix="Title"
           type="text"
           value={title}
           checked
-          onChange={(e) => inputValueChange("title", e.target.value)}
+          onChange={(e) => inputValueChange('title', e.target.value)}
         />
-        <Input
-          prefix="URL"
-          type="text"
-          value={url}
-          onChange={(e) => inputValueChange("url", e.target.value)}
-        />
+        <Input prefix="URL" type="text" value={url} onChange={(e) => inputValueChange('url', e.target.value)} />
 
         <Button onClick={addRow}>Add</Button>
       </header>

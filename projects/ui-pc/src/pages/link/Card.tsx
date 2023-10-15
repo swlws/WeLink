@@ -1,13 +1,12 @@
-import { SiteRecord } from "@/typing";
-import styles from "./index.module.scss";
+import { SiteRecord } from '@/typing';
+import dayjs from 'dayjs';
+import styles from './index.module.scss';
 
-export default function Card(props: {
-  record: SiteRecord;
-  rm: (row: SiteRecord) => void;
-  "data-index": number;
-}) {
+const renderTime = (timestamp?: number) =>
+  timestamp ? <span>{dayjs(timestamp).format('YYYY-MM-DD HH:mm:ss')}</span> : null;
+
+export default function Card(props: { record: SiteRecord; rm: (row: SiteRecord) => void; 'data-index': number }) {
   const { record } = props;
-  const last_access_time = record.last_access_time as any;
 
   const rm = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -15,7 +14,7 @@ export default function Card(props: {
   };
 
   const dragStart = (e: React.DragEvent, uuid: string) => {
-    e.dataTransfer.setData("uuid", uuid);
+    e.dataTransfer.setData('uuid', uuid);
   };
   const dragEvent = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -25,7 +24,7 @@ export default function Card(props: {
     <section
       className={styles.card}
       data-proxy
-      data-index={props["data-index"]}
+      data-index={props['data-index']}
       draggable="true"
       onDragStart={(e) => dragStart(e, record.uuid)}
       onDrag={dragEvent}
@@ -36,7 +35,7 @@ export default function Card(props: {
         <div>
           <span>{record.category}</span>
           <span className={styles.count}>访问数：{record.count}</span>
-          {last_access_time ? <span>{last_access_time}</span> : ""}
+          {renderTime(record.last_access_time)}
           <span className={styles.del} onClick={rm}>
             移除
           </span>

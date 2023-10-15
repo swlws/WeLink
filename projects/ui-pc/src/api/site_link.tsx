@@ -1,17 +1,16 @@
-import { SiteRecord } from "@/typing";
-import { getDBTable } from "./db/driver";
-import { SITE_LINK } from "./db/table";
-import dayjs from "dayjs";
-import { v4 } from "uuid";
+import { SiteRecord } from '@/typing';
+import { v4 } from 'uuid';
+import { getDBTable } from './db/driver';
+import { SITE_LINK } from './db/table';
 
 const tableSiteLink = getDBTable(SITE_LINK);
 
 export function getCategoryList() {
   return getLinkList().then((list) => {
     const set = new Set<string>();
-    set.add("All");
+    set.add('All');
 
-    list.forEach((item) => set.add(item.category || ""));
+    list.forEach((item) => set.add(item.category || ''));
 
     return Array.from(set).sort((a: any, b: any) => (a < b ? -1 : 1));
   });
@@ -29,8 +28,8 @@ export function addOneCateGory(title: string) {
 }
 
 function autoFixRecord(row: SiteRecord) {
-  if (!row.category) row.category = "All";
-  if (!row.create_time) row.create_time = dayjs().toISOString();
+  if (!row.category) row.category = 'All';
+  if (!row.create_time) row.create_time = +new Date();
   if (!row.uuid) row.uuid = v4();
 }
 
@@ -45,7 +44,7 @@ export function getLinkList(category?: string) {
 
       list.forEach(autoFixRecord);
 
-      if (!category || category === "All") return list;
+      if (!category || category === 'All') return list;
 
       return list.filter((item) => item.category === category);
     });
