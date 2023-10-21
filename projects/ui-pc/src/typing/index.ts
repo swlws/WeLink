@@ -6,4 +6,6 @@ export type SiteRecord = {
   create_time: number;
   last_access_time?: number;
   uuid: string;
+  star?: boolean;
+  schedule?: string;
 };

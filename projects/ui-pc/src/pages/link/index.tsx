@@ -1,35 +1,35 @@
-import { addOneCateGory, getCategoryList, getLinkList, upsertOneLink } from '@/api/site_link';
-import { PlusOutlined } from '@ant-design/icons';
-import { Button, Tabs, TabsProps } from 'antd';
-import { useEffect, useRef, useState } from 'react';
-import AddCategory from './AddCategory';
-import SiteList from './SiteList';
-import styles from './index.module.scss';
+import { getCategoryList, getLinkList, upsertOneLink } from "@/api/site_link";
+import { Tabs, TabsProps } from "antd";
+import { useEffect, useRef, useState } from "react";
+import AddCategory from "./AddCategory";
+import AddLink from "./AddLink";
+import SiteList from "./SiteList";
+import styles from "./index.module.scss";
+
+function useActiveKey(): [string, (v: string) => void] {
+  const [activeKey, selectedKey] = useState("All");
+
+  return [activeKey, (v: string) => selectedKey(v)];
+}
 
 export default function LinkTabs() {
+  const [activeKey, setActiveKey] = useActiveKey();
   const [list, setList] = useState<string[]>([]);
+  const [sign, updateState] = useState(false);
+  const forceUpdate = () => updateState(() => !sign);
+
   const tabWrapperRef = useRef(null);
 
   useEffect(() => {
     getCategoryList().then((list) => setList(list));
   }, []);
 
-  const [visibility, setVisibility] = useState(false);
-  const addSuccess = (title: string) => {
-    addOneCateGory(title).then((list) => {
-      setList(list);
-    });
-  };
-
-  const closeModel = () => setVisibility(false);
-
   const operations = {
-    left: <Button type="link" onClick={() => setVisibility(true)} icon={<PlusOutlined />} />,
+    // 添加分类
+    left: <AddCategory ok={setList} />,
   };
 
-  const [sign, updateState] = useState(false);
-  const forceUpdate = () => updateState(() => !sign);
-  const items: TabsProps['items'] = list.map((item) => ({
+  const items: TabsProps["items"] = list.map((item) => ({
     key: item,
     label: item,
     children: <SiteList category={item} sign={sign} />,
@@ -43,10 +43,10 @@ export default function LinkTabs() {
     event.preventDefault();
 
     const target = event.target as any;
-    if (!target.classList.contains('ant-tabs-tab-btn')) return;
+    if (!target.classList.contains("ant-tabs-tab-btn")) return;
 
     const category = target.innerText;
-    const uuid = event.dataTransfer.getData('uuid');
+    const uuid = event.dataTransfer.getData("uuid");
 
     const list = await getLinkList();
     const obj = list.find((item) => item.uuid === uuid);
@@ -59,18 +59,25 @@ export default function LinkTabs() {
   };
 
   return (
-    <article className={styles.container} onDragOver={dragOverEvent} onDrop={dropEvent}>
-      <div style={{ height: '100%' }} ref={tabWrapperRef}>
+    <article
+      className={styles.container}
+      onDragOver={dragOverEvent}
+      onDrop={dropEvent}
+    >
+      {/* Tab */}
+      <div style={{ height: "100%" }} ref={tabWrapperRef}>
         <Tabs
-          style={{ height: '100%' }}
+          style={{ height: "100%" }}
           destroyInactiveTabPane
           tabBarExtraContent={operations}
-          defaultActiveKey="All"
+          defaultActiveKey={activeKey}
           items={items}
+          onChange={setActiveKey}
         ></Tabs>
       </div>
 
-      <AddCategory visibility={visibility} ok={addSuccess} close={closeModel} />
+      {/* 添加链接 */}
+      <AddLink category={activeKey} ok={forceUpdate} />
     </article>
   );
 }

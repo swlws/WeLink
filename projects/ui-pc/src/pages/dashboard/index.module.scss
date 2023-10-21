@@ -2,13 +2,85 @@
   > header {
     margin: 50px 0;
     color: #333;
-    font-size: 3em;
-    font-weight: bolder;
+
     text-align: center;
+
+    > h1 {
+      font-size: 3em;
+      font-weight: bolder;
+      margin: 0;
+      padding: 0;
+    }
   }
 
   > main {
-    text-align: center;
-    color: #666;
+    display: flex;
+    justify-content: space-around;
+
+    > * {
+      flex: 1;
+
+      margin: 0 20px;
+    }
+  }
+}
+
+.render-list {
+  > header {
+    padding: 0 0 5px 10px;
+    border-bottom: 1px solid #333;
+
+    font-size: 1.1em;
+    font-weight: bolder;
+  }
+}
+
+.card {
+  user-select: none;
+
+  box-sizing: border-box;
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #e8e8e8;
+  border-radius: 5px;
+  background-color: #fff;
+
+  position: relative;
+
+  > * {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  > header {
+    font-weight: bolder;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    > main {
+      flex: 1;
+    }
+  }
+  > main {
+    margin: 5px 0;
+  }
+
+  &:hover {
+    cursor: pointer;
+
+    border-color: #009afe;
+    > header {
+      > main {
+        color: #009afe;
+      }
+
+      > aside {
+        display: inline-block;
+      }
+    }
   }
 }

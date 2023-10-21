@@ -1,11 +1,11 @@
-import { delOneLink, getLinkList, upsertOneLink } from '@/api/site_link';
-import { SiteRecord } from '@/typing';
-import { handleDomEventProxy } from '@/util/dom';
-import { Button, Input } from 'antd';
-import React, { useEffect, useState } from 'react';
-import { v4 } from 'uuid';
-import Card from './Card';
-import styles from './index.module.scss';
+import { delOneLink, getLinkList, upsertOneLink } from "@/api/site_link";
+import { SiteRecord } from "@/typing";
+import { handleDomEventProxy } from "@/util/dom";
+import { Button, Input } from "antd";
+import React, { useEffect, useState } from "react";
+import { v4 } from "uuid";
+import Card from "./Card";
+import styles from "./index.module.scss";
 
 type SiteListProps = {
   category: string;
@@ -28,39 +28,6 @@ export default function SiteList(props: SiteListProps) {
   };
 
   useEffect(resetRenderedList, [props.category, props.sign]);
-
-  const [title, setTitle] = useState('');
-  const [url, setUrl] = useState('');
-
-  const clear = () => {
-    setTitle('');
-    setUrl('');
-  };
-
-  const inputValueChange = (type: 'title' | 'url', value: string) => {
-    if (type === 'title') {
-      setTitle(value);
-    } else if (type === 'url') {
-      setUrl(value);
-    }
-  };
-
-  const addRow = () => {
-    if (!title || !url) return;
-
-    const info = {
-      title,
-      url,
-      count: 0,
-      category: props.category,
-      create_time: +new Date(),
-      uuid: v4(),
-    };
-    upsertOneLink(info).then(() => {
-      resetRenderedList();
-      clear();
-    });
-  };
 
   const rmRow = (row: SiteRecord) => {
     delOneLink(row).then(resetRenderedList);
@@ -85,20 +52,7 @@ export default function SiteList(props: SiteListProps) {
   };
 
   return (
-    <article className={styles['site-list']}>
-      <header>
-        <Input
-          prefix="Title"
-          type="text"
-          value={title}
-          checked
-          onChange={(e) => inputValueChange('title', e.target.value)}
-        />
-        <Input prefix="URL" type="text" value={url} onChange={(e) => inputValueChange('url', e.target.value)} />
-
-        <Button onClick={addRow}>Add</Button>
-      </header>
-
+    <article className={styles["site-list"]}>
       <main onClick={toSite}>
         {renderedList.map((item, index) => (
           <Card record={item} rm={rmRow} key={index} data-index={index}></Card>

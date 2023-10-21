@@ -1,10 +1,10 @@
+import { addOneCateGory } from "@/api/site_link";
 import { Input, Modal } from "antd";
 import { useState } from "react";
+import styles from "./index.module.scss";
 
 type AddCategoryProps = {
-  visibility: boolean;
-  ok: (title: string) => void;
-  close: () => void;
+  ok: (list: string[]) => void;
 };
 
 /**
@@ -14,30 +14,38 @@ type AddCategoryProps = {
  * @returns
  */
 export default function AddCategory(props: AddCategoryProps) {
+  const [visibility, setVisibility] = useState(false);
   const [value, setValue] = useState("");
 
-  const clear = () => {
-    setValue("");
-  };
   const handleOk = () => {
-    props.ok(value);
-    props.close();
-    clear();
+    addOneCateGory(value).then((list) => {
+      console.log("--", list, props.ok);
+      props.ok([...list]);
+      setVisibility(false);
+    });
   };
 
   const handleCancel = () => {
-    props.close();
-    clear();
+    setVisibility(false);
   };
 
   return (
-    <Modal
-      title="添加分类"
-      open={props.visibility}
-      onOk={handleOk}
-      onCancel={handleCancel}
+    <section
+      className={styles["add-category"]}
+      style={{ padding: "0 10px", cursor: "pointer" }}
     >
-      <Input value={value} onChange={(e) => setValue(e.target.value)} />
-    </Modal>
+      <header onClick={() => setVisibility(true)}>
+        <i className="iconfont icon-add"></i>
+      </header>
+
+      <Modal
+        title="添加分类"
+        open={visibility}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <Input value={value} onChange={(e) => setValue(e.target.value)} />
+      </Modal>
+    </section>
   );
 }
