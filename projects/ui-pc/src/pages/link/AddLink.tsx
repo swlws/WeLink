@@ -27,7 +27,9 @@ export default function AddLink(props: AddLinkProps) {
 
   const handleOk = () => {
     form.validateFields().then((info) => {
-      const schedule = dayjs(info.schedule).format("YYYY-MM-DD");
+      const schedule = info.schedule
+        ? dayjs(info.schedule).format("YYYY-MM-DD")
+        : undefined;
 
       upsertOneLink({
         ...info,
